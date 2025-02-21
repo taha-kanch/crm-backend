@@ -33,7 +33,7 @@ export class Subscription extends Model<Subscription> {
         type: DataType.INTEGER,
         allowNull: false,
     })
-    typeID: number
+    typeID: number;
 
     @BelongsTo(() => SubscriptionType)
     subscriptionType: SubscriptionType;
