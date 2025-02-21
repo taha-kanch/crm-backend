@@ -1,9 +1,4 @@
-import { IsNotEmpty, MinLength, IsEmail, IsEnum } from 'class-validator';
-
-// enum Gender {
-//     MALE = 'male',
-//     FEMALE = 'female',
-// }
+import { IsNotEmpty, MinLength, IsEmail, IsEnum, IsOptional, IsDate, isNotEmpty } from 'class-validator';
 
 export class UserDto {
     @IsNotEmpty()
@@ -17,9 +12,20 @@ export class UserDto {
     @MinLength(8)
     readonly password: string;
 
-    // @IsNotEmpty()
-    // @IsEnum(Gender, {
-    //     message: 'gender must be either male or female',
-    // })
-    // readonly gender: Gender;
+    @IsOptional()
+    readonly subscriptionID: string;
+
+    @IsOptional()
+    @IsDate()
+    readonly subscriptionStartDate?: Date
+
+    @IsOptional()
+    @IsDate()
+    readonly subscriptionEndDate?: Date
+
+}
+
+export class SubscribeUserDto {
+    @IsNotEmpty()
+    readonly subscriptionID: string;
 }

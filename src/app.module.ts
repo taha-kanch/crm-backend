@@ -3,14 +3,19 @@ import { DatabaseModule } from './core/database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { AuthService } from './modules/auth/auth.service';
+import { SubscriptionTypeModule } from './modules/subscription-type/subscription-type.module';
+import { SubscriptionModule } from './modules/subscription/subscription.module';
+import { StripeModule } from './modules/stripe/stripe.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     AuthModule,
-    UsersModule
+    UsersModule,
+    SubscriptionTypeModule,
+    SubscriptionModule,
+    StripeModule
   ]
 })
 export class AppModule {}

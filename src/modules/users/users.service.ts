@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, InternalServerErrorException } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserDto } from './dto/user.dto';
 import { USER_REPOSITORY } from '../../core/constants';
@@ -18,5 +18,22 @@ export class UsersService {
 
     async findOneById(id: number): Promise<User | null> {
         return await this.userRepository.findOne<User>({ where: { id } });
+    }
+
+    async subscribeUser(id: number, data) {   
+        try {
+            const startDate = new Date();
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + data.duration);
+            const body = {
+                subscriptionID: data.id,
+                subscriptionStartDate: startDate,
+                subscriptionEndDate: endDate,
+            }
+            return await this.userRepository.update({...body}, { where: { id } });
+
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
     }
 }

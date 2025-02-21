@@ -34,7 +34,6 @@ export class AuthService {
     }
 
     public async create(user) {
-        console.log(user);
         // hash the password
         const pass = await this.hashPassword(user.password);
 

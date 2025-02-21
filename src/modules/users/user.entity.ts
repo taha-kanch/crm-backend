@@ -1,4 +1,5 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Subscription } from '../subscription/subscription.entity';
 
 @Table
 export class User extends Model<User> {
@@ -21,10 +22,25 @@ export class User extends Model<User> {
     })
     password: string;
 
-    // @Column({
-    //     type: DataType.ENUM,
-    //     values: ['male', 'female'],
-    //     allowNull: false,
-    // })
-    // gender: string;
+    @Column({
+        type: DataType.DATE,
+        allowNull: true,
+    })
+    subscriptionStartDate: Date;
+    
+    @Column({
+        type: DataType.DATE,
+        allowNull: true,
+    })
+    subscriptionEndDate: Date;
+
+    @ForeignKey(() => Subscription)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: true,
+    })
+    subscriptionID: number;
+
+    @BelongsTo(() => Subscription)
+    subscription: Subscription;
 }
