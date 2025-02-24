@@ -1,8 +1,9 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { Subscription } from '../subscription/subscription.entity';
+import { BelongsTo, Column, DataType, Default, ForeignKey, Model, Table } from "sequelize-typescript";
+import { User } from "../users/user.entity";
+import { LeadStatus } from "src/core/constants";
 
 @Table
-export class User extends Model<User> {
+export class Lead extends Model<Lead> {
 
     @Column({
         type: DataType.STRING,
@@ -33,41 +34,41 @@ export class User extends Model<User> {
         type: DataType.STRING,
         allowNull: false,
     })
-    password: string;
-
+    phoneNumber: string;
+    
     @Column({
-        type: DataType.INTEGER,
-        allowNull: true,
+        type: DataType.STRING,
+        allowNull: false,
     })
-    phoneNumber: number;
+    addressLine1: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: true,
     })
-    address: string;
+    addressLine2: string;
 
     @Column({
         type: DataType.STRING,
-        allowNull: true,
+        allowNull: false,
     })
     city: string;
 
     @Column({
         type: DataType.STRING,
-        allowNull: true,
+        allowNull: false,
     })
     state: string;
 
     @Column({
         type: DataType.STRING,
-        allowNull: true,
+        allowNull: false,
     })
     country: string;
 
     @Column({
         type: DataType.INTEGER,
-        allowNull: true,
+        allowNull: false,
     })
     postalCode: number
 
@@ -77,49 +78,63 @@ export class User extends Model<User> {
     })
     gender: string;
 
+    @Default(LeadStatus.NEW)
     @Column({
         type: DataType.STRING,
-        allowNull: true
-    })
-    facebook: string;
-    
-    @Column({
-        type: DataType.STRING,
-        allowNull: true
-    })
-    xcom: string;
-    
-    @Column({
-        type: DataType.STRING,
-        allowNull: true
-    })
-    linkedIn: string;
-    
-    @Column({
-        type: DataType.STRING,
-        allowNull: true
-    })
-    instagram: string;
-
-    @Column({
-        type: DataType.DATE,
         allowNull: true,
     })
-    subscriptionStartDate: Date;
+    status: string;
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.STRING,
+        allowNull: false,
+    })
+    companyName: string;
+
+    @Column({
+        type: DataType.STRING,
         allowNull: true,
     })
-    subscriptionEndDate: Date;
+    website: string;
 
-    @ForeignKey(() => Subscription)
     @Column({
         type: DataType.INTEGER,
         allowNull: true,
     })
-    subscriptionID: number;
+    annualRevenue: number;
 
-    @BelongsTo(() => Subscription)
-    subscription: Subscription;
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
+    numberOfEmployees: number;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
+    industryType: string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: true,
+    })
+    fax: string;
+
+    @Column({
+        type: DataType.ARRAY(DataType.STRING),
+        allowNull: true,
+    })
+    interestedProducts: string[];
+
+    @ForeignKey(() => User)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
+    leadOwner: number;
+
+    @BelongsTo(() => User)
+    user: User;
+
 }

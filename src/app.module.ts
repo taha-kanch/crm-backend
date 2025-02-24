@@ -6,6 +6,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { SubscriptionTypeModule } from './modules/subscription-type/subscription-type.module';
 import { SubscriptionModule } from './modules/subscription/subscription.module';
 import { StripeModule } from './modules/stripe/stripe.module';
+import { LeadModule } from './modules/lead/lead.module';
+import { ActivityService } from './modules/activity/activity.service';
+import { ActivityModule } from './modules/activity/activity.module';
 
 @Module({
   imports: [
@@ -15,7 +18,10 @@ import { StripeModule } from './modules/stripe/stripe.module';
     UsersModule,
     SubscriptionTypeModule,
     SubscriptionModule,
-    StripeModule
-  ]
+    StripeModule,
+    LeadModule,
+    ActivityModule
+  ],
+  providers: []
 })
 export class AppModule {}

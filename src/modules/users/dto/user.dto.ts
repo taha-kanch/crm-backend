@@ -1,12 +1,43 @@
-import { IsNotEmpty, MinLength, IsEmail, IsEnum, IsOptional, IsDate, isNotEmpty } from 'class-validator';
+import { IsNotEmpty, MinLength, IsEmail, IsEnum, IsOptional, IsDate, IsMobilePhone, IsNumber } from 'class-validator';
+import { Gender } from 'src/core/constants';
 
 export class UserDto {
     @IsNotEmpty()
-    readonly name: string;
+    readonly firstName: string;
+
+    @IsNotEmpty()
+    readonly lastName: string;
+
+    @IsOptional()
+    readonly fullName: string;
 
     @IsNotEmpty()
     @IsEmail()
     readonly email: string;
+
+    @IsOptional()
+    @IsMobilePhone()
+    readonly phoneNumber: string;
+
+    @IsOptional()
+    readonly address: string;
+
+    @IsOptional()
+    readonly city: string;
+
+    @IsOptional()
+    readonly state: string;
+
+    @IsOptional()
+    readonly country: string;
+
+    @IsOptional()
+    @IsNumber()
+    readonly postalCode: number
+
+    @IsOptional()
+    @IsEnum(Gender, { message: "gender must be one of: male, female, other" })
+    readonly gender: number;
 
     @IsNotEmpty()
     @MinLength(8)
@@ -22,7 +53,6 @@ export class UserDto {
     @IsOptional()
     @IsDate()
     readonly subscriptionEndDate?: Date
-
 }
 
 export class SubscribeUserDto {

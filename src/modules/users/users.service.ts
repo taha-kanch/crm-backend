@@ -9,18 +9,39 @@ export class UsersService {
     constructor(@Inject(USER_REPOSITORY) private readonly userRepository: typeof User) { }
 
     async create(user: UserDto | any): Promise<User> {
-        return await this.userRepository.create<User>(user);
+        try {
+            return await this.userRepository.create<User>(user);
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
     }
 
     async findOneByEmail(email: string): Promise<User | null> {
-        return await this.userRepository.findOne<User>({ where: { email } });
+        try {
+            return await this.userRepository.findOne<User>({ where: { email } });
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
     }
 
     async findOneById(id: number): Promise<User | null> {
-        return await this.userRepository.findOne<User>({ where: { id } });
+        try {
+            return await this.userRepository.findOne<User>({ where: { id } });
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
     }
 
-    async subscribeUser(id: number, data) {   
+    async update(id, data) {
+        try {
+            const [numberOfAffectedRows, [updatedUser]] = await this.userRepository.update({ ...data }, { where: { id }, returning: true });
+            return { numberOfAffectedRows, updatedUser };
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    }
+
+    async subscribeUser(id: number, data) {
         try {
             const startDate = new Date();
             const endDate = new Date(startDate);
@@ -30,7 +51,7 @@ export class UsersService {
                 subscriptionStartDate: startDate,
                 subscriptionEndDate: endDate,
             }
-            return await this.userRepository.update({...body}, { where: { id } });
+            return await this.userRepository.update({ ...body }, { where: { id } });
 
         } catch (error) {
             throw new InternalServerErrorException(error);

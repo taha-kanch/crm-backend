@@ -1,5 +1,5 @@
 import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { SUBSCRIPTION } from 'src/core/constants';
+import { SUBSCRIPTION_REPOSITORY } from 'src/core/constants';
 import { Subscription } from './subscription.entity';
 import { SubscriptionDto } from './dto/subscription.dto';
 import { Attributes } from 'sequelize';
@@ -8,7 +8,7 @@ import { SubscriptionType } from '../subscription-type/subscription-type.entity'
 @Injectable()
 export class SubscriptionService {
 
-    constructor(@Inject(SUBSCRIPTION) private readonly subscriptionRepository: typeof Subscription) { }
+    constructor(@Inject(SUBSCRIPTION_REPOSITORY) private readonly subscriptionRepository: typeof Subscription) { }
 
     async create(subscription: SubscriptionDto): Promise<Subscription> {
         try {

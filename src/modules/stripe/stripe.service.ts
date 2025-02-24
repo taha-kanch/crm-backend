@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 import { UsersService } from '../users/users.service';
-import { SUBSCRIPTION } from 'src/core/constants';
+import { SUBSCRIPTION_REPOSITORY } from 'src/core/constants';
 import { Subscription } from '../subscription/subscription.entity';
 import { SubscriptionType } from '../subscription-type/subscription-type.entity';
 
@@ -12,7 +12,7 @@ export class StripeService {
 
     constructor(
         private configService: ConfigService, private readonly userService: UsersService,
-        @Inject(SUBSCRIPTION) private readonly subscriptionRepository: typeof Subscription,
+        @Inject(SUBSCRIPTION_REPOSITORY) private readonly subscriptionRepository: typeof Subscription,
     ) {
         this.stripe = new Stripe(this.configService.get(`STRIPE_SECRET_KEY`) || '', {
             apiVersion: '2025-01-27.acacia',
