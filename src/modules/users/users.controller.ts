@@ -1,7 +1,8 @@
-import { Body, Controller, Get, NotFoundException, Param, Put, Request } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Put, Request, UseGuards } from '@nestjs/common';
 import { SubscribeUserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -13,6 +14,7 @@ export class UsersController {
         return await this.userService.subscribeUser(id, subscribeUser);
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Put(":id")
     async update(@Param('id') id: number, @Body() user: User, @Request() req): Promise<User> {
         const { numberOfAffectedRows, updatedUser } = await this.userService.update(id, user);
@@ -22,6 +24,7 @@ export class UsersController {
         return updatedUser;
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Get(":id")
     async findOne(@Param('id') id: number): Promise<User> {
         const user = await this.userService.findOneById(id);

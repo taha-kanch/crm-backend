@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, BeforeCreate, Default, BeforeUpdate } from 'sequelize-typescript';
 import { Subscription } from '../subscription/subscription.entity';
 
 @Table
@@ -16,6 +16,7 @@ export class User extends Model<User> {
     })
     lastName: string;
 
+    @Default("")
     @Column({
         type: DataType.STRING,
         allowNull: false,
@@ -36,10 +37,10 @@ export class User extends Model<User> {
     password: string;
 
     @Column({
-        type: DataType.INTEGER,
+        type: DataType.STRING,
         allowNull: true,
     })
-    phoneNumber: number;
+    phoneNumber: string;
 
     @Column({
         type: DataType.STRING,
@@ -122,4 +123,9 @@ export class User extends Model<User> {
 
     @BelongsTo(() => Subscription)
     subscription: Subscription;
+
+    @BeforeCreate
+    static generateFullName(user: User) {
+        user.fullName = `${user.firstName} ${user.lastName}`;
+    }
 }

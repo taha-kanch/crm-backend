@@ -17,9 +17,12 @@ export class ActivityService {
         }
     }
 
-    async findAll(): Promise<Activity[]> {
+    async findAll(userID: number): Promise<Activity[]> {
         try {
             return await this.activityRepository.findAll<Activity>({
+                where: {
+                    userID: userID
+                }
             });
         } catch (error) {
             throw new InternalServerErrorException(error.message);

@@ -1,6 +1,7 @@
 import { BelongsTo, Column, DataType, Default, ForeignKey, Model, Table } from "sequelize-typescript";
 import { Lead } from "../lead/lead.entity";
 import { ActivityStatus } from "src/core/constants";
+import { User } from "../users/user.entity";
 
 @Table
 export class Activity extends Model<Activity> {
@@ -60,6 +61,16 @@ export class Activity extends Model<Activity> {
         allowNull: false,
     })
     leadID: number;
+
+    @ForeignKey(() => User)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
+    userID: number;
+
+    @BelongsTo(() => User)
+    user: User;
 
     @BelongsTo(() => Lead)
     lead: Lead;

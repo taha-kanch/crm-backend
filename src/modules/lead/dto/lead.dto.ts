@@ -20,10 +20,10 @@ export class LeadDto {
     readonly phoneNumber: string;
 
     @IsNotEmpty()
-    readonly addressLine1: string;
-    
+    readonly jobTitle: string;
+
     @IsNotEmpty()
-    readonly addressLine2: string;
+    readonly address: string;
 
     @IsNotEmpty()
     readonly city: string;
@@ -71,7 +71,7 @@ export class LeadDto {
     readonly fax: string;
 
     @IsArray()
-    @IsEnum(InterestedProduct, { each: true, message: "interested product must be one of: IT, FINANCE, HEALTHCARE, EDUCATION" })
+    @IsEnum(InterestedProduct, { each: true, message: "interested product must be one of: SOFTWARE, HARDWARE, SERVICE" })
     // @ArrayNotEmpty()
     readonly interestedProducts: string[];
 

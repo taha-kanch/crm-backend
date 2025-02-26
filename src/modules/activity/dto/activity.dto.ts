@@ -34,4 +34,7 @@ export class ActivityDto {
 
     @IsNotEmpty()
     readonly leadID: number;
+    
+    @IsNotEmpty()
+    readonly userID: number;
 }

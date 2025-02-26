@@ -17,16 +17,12 @@ export class LeadService {
         }
     }
 
-    async findAll(): Promise<Lead[]> {
+    async findAll(userID: number): Promise<Lead[]> {
         try {
             return await this.leadRepository.findAll<Lead>({
-                // include: [
-                //     {
-                //         model: SubscriptionType,
-                //         as: "subscriptionType",
-                //         attributes: ["typeName"],
-                //     }
-                // ]
+                where: {
+                    leadOwner: userID
+                }
             });
         } catch (error) {
             throw new InternalServerErrorException(error.message);
@@ -55,6 +51,7 @@ export class LeadService {
 
     async update(id, data) {
         try {
+            data.fullName = `${data.firstName} ${data.lastName}`;
             const [numberOfAffectedRows, [updatedLead]] = await this.leadRepository.update({ ...data }, { where: { id }, returning: true });
             return { numberOfAffectedRows, updatedLead };
         } catch (error) {

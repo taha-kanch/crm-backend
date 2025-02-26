@@ -1,4 +1,4 @@
-import { BelongsTo, Column, DataType, Default, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BeforeCreate, BelongsTo, Column, DataType, Default, ForeignKey, Model, Table } from "sequelize-typescript";
 import { User } from "../users/user.entity";
 import { LeadStatus } from "src/core/constants";
 
@@ -17,6 +17,7 @@ export class Lead extends Model<Lead> {
     })
     lastName: string;
 
+    @Default("")
     @Column({
         type: DataType.STRING,
         allowNull: false,
@@ -35,18 +36,18 @@ export class Lead extends Model<Lead> {
         allowNull: false,
     })
     phoneNumber: string;
-    
+
     @Column({
         type: DataType.STRING,
         allowNull: false,
     })
-    addressLine1: string;
+    jobTitle: string;
 
     @Column({
         type: DataType.STRING,
-        allowNull: true,
+        allowNull: false,
     })
-    addressLine2: string;
+    address: string;
 
     @Column({
         type: DataType.STRING,
@@ -136,5 +137,10 @@ export class Lead extends Model<Lead> {
 
     @BelongsTo(() => User)
     user: User;
+
+    @BeforeCreate
+    static generateFullName(lead: User) {
+        lead.fullName = `${lead.firstName} ${lead.lastName}`;
+    }
 
 }

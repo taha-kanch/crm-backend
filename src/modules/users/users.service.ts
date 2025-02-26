@@ -26,7 +26,7 @@ export class UsersService {
 
     async findOneById(id: number): Promise<User | null> {
         try {
-            return await this.userRepository.findOne<User>({ where: { id } });
+            return await this.userRepository.findOne<User>({ where: { id }, attributes: { exclude: ['password'] } });
         } catch (error) {
             throw new InternalServerErrorException(error);
         }
@@ -34,6 +34,7 @@ export class UsersService {
 
     async update(id, data) {
         try {
+            data.fullName = `${data.firstName} ${data.lastName}`;
             const [numberOfAffectedRows, [updatedUser]] = await this.userRepository.update({ ...data }, { where: { id }, returning: true });
             return { numberOfAffectedRows, updatedUser };
         } catch (error) {
