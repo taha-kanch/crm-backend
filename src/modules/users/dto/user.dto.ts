@@ -16,7 +16,7 @@ export class UserDto {
     readonly email: string;
 
     @IsOptional()
-    @IsMobilePhone()
+    // @IsMobilePhone()
     readonly phoneNumber: string;
 
     @IsOptional()

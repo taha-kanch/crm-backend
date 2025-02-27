@@ -1,5 +1,5 @@
 import { IsNotEmpty, MinLength, IsEmail, IsEnum, IsOptional, IsDate, IsMobilePhone, IsNumber, IsString, IsArray, ArrayNotEmpty, IsBoolean } from 'class-validator';
-import { ActivityStatus, ActivityType, Gender, IndustryType, InterestedProduct, LeadStatus } from 'src/core/constants';
+import { ActivityStatus, ActivityType } from 'src/core/constants';
 
 export class ActivityDto {
     @IsNotEmpty()

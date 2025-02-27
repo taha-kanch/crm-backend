@@ -17,6 +17,12 @@ export class ActivityController {
     }
 
     @UseGuards(AuthGuard('jwt'))
+    @Get("lead/:id")
+    async findByLeadID( @Param('id') leadID: number) {
+        return await this.activityService.findByLeadID(leadID);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
     @Get(":id")
     async findOne(@Param('id') id: number): Promise<Activity> {
         const activity = await this.activityService.findOne(id);

@@ -1,9 +1,12 @@
-import { IsNotEmpty, IsOptional } from "class-validator";
+import { IsArray, IsNotEmpty, IsOptional } from "class-validator";
 
 export class SubscriptionDto {
 
     @IsNotEmpty()
     readonly typeID: number;
+    
+    @IsNotEmpty()
+    readonly planName: string;
 
     @IsNotEmpty()
     readonly price: number;
@@ -13,6 +16,10 @@ export class SubscriptionDto {
 
     @IsNotEmpty()
     readonly description: string;
+
+    @IsArray()
+    @IsOptional()
+    readonly features?: string[];
 
     @IsOptional()
     readonly active?: Boolean;

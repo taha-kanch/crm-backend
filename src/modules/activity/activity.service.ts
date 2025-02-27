@@ -3,6 +3,7 @@ import { ACTIVITY_REPOSITORY } from 'src/core/constants';
 import { Activity } from './activity.entity';
 import { ActivityDto } from './dto/activity.dto';
 import { Attributes } from 'sequelize';
+import { Lead } from '../lead/lead.entity';
 
 @Injectable()
 export class ActivityService {
@@ -22,7 +23,33 @@ export class ActivityService {
             return await this.activityRepository.findAll<Activity>({
                 where: {
                     userID: userID
-                }
+                },
+                include: [
+                    {
+                        model: Lead,
+                        as: "lead",
+                        attributes: ["firstName", "lastName", "fullName", "email", "jobTitle"],
+                    }
+                ]
+            });
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    }
+
+    async findByLeadID(leadID: number): Promise<Activity[]> {
+        try {
+            return await this.activityRepository.findAll<Activity>({
+                where: {
+                    leadID: leadID,
+                },
+                include: [
+                    {
+                        model: Lead,
+                        as: "lead",
+                        attributes: ["firstName", "lastName", "fullName", "email", "jobTitle"],
+                    }
+                ]
             });
         } catch (error) {
             throw new InternalServerErrorException(error.message);
@@ -33,6 +60,13 @@ export class ActivityService {
         try {
             return await this.activityRepository.findOne({
                 where: { id },
+                include: [
+                    {
+                        model: Lead,
+                        as: "lead",
+                        attributes: ["firstName", "lastName", "fullName", "email", "jobTitle"],
+                    }
+                ]
             });
         } catch (error) {
             throw new InternalServerErrorException(error.message);

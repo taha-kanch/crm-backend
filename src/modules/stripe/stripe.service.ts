@@ -54,7 +54,7 @@ export class StripeService {
             ],
             mode: "payment",
             success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.FRONTEND_URL}/subscription/cancel`,
+            cancel_url: `${process.env.FRONTEND_URL}/subscription/failed`,
             metadata: { userID, subscriptionID },
         });
 

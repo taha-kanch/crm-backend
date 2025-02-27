@@ -4,6 +4,12 @@ import { SubscriptionType } from "../subscription-type/subscription-type.entity"
 @Table
 export class Subscription extends Model<Subscription> {
     @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
+    planName: string;
+
+    @Column({
         type: DataType.FLOAT,
         allowNull: false,
     })
@@ -20,6 +26,12 @@ export class Subscription extends Model<Subscription> {
         allowNull: true,
     })
     description: string;
+
+    @Column({
+        type: DataType.ARRAY(DataType.STRING),
+        allowNull: true,
+    })
+    features: string[];
 
     @Default(false)
     @Column({

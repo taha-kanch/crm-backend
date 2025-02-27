@@ -16,7 +16,7 @@ export class LeadDto {
     readonly email: string;
 
     @IsNotEmpty()
-    @IsMobilePhone()
+    // @IsMobilePhone()
     readonly phoneNumber: string;
 
     @IsNotEmpty()
