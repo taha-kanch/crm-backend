@@ -1,4 +1,4 @@
-import { BeforeCreate, BelongsTo, Column, DataType, Default, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BeforeCreate, BeforeSave, BeforeUpdate, BelongsTo, Column, DataType, Default, ForeignKey, Model, Table } from "sequelize-typescript";
 import { User } from "../users/user.entity";
 import { LeadStatus } from "src/core/constants";
 
@@ -87,6 +87,18 @@ export class Lead extends Model<Lead> {
     status: string;
 
     @Column({
+        type: DataType.DECIMAL(10, 2),
+        allowNull: false,
+    })
+    dealValue: number;
+
+    @Column({
+        type: DataType.DATE,
+        allowNull: true,
+    })
+    wonDate: Date;
+
+    @Column({
         type: DataType.STRING,
         allowNull: false,
     })
@@ -99,7 +111,7 @@ export class Lead extends Model<Lead> {
     website: string;
 
     @Column({
-        type: DataType.INTEGER,
+        type: DataType.DECIMAL(10, 2),
         allowNull: true,
     })
     annualRevenue: number;
@@ -139,8 +151,23 @@ export class Lead extends Model<Lead> {
     user: User;
 
     @BeforeCreate
-    static generateFullName(lead: User) {
+    static generateFullName(lead: Lead) {
         lead.fullName = `${lead.firstName} ${lead.lastName}`;
+    }
+
+    @BeforeSave
+    static generateWonDate(lead: Lead) {
+        if (lead.status === "WON") {
+            lead.wonDate = new Date();
+        }
+    }
+
+    toJSON() {
+        return {
+            ...this.get(),
+            annualRevenue: parseFloat(this.getDataValue('annualRevenue') as unknown as string),
+            dealValue: parseFloat(this.getDataValue('dealValue') as unknown as string),
+        }
     }
 
 }

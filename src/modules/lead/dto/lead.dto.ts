@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsEmail, IsEnum, IsOptional, IsMobilePhone, IsNumber, IsString, IsArray, ArrayNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, IsEmail, IsEnum, IsOptional, IsMobilePhone, IsNumber, IsString, IsArray, ArrayNotEmpty, IsDate } from 'class-validator';
 import { Gender, IndustryType, InterestedProduct, LeadStatus } from 'src/core/constants';
 
 export class LeadDto {
@@ -9,7 +10,7 @@ export class LeadDto {
     readonly lastName: string;
 
     @IsOptional()
-    readonly fullName: string;
+    fullName: string;
 
     @IsNotEmpty()
     @IsEmail()
@@ -45,6 +46,15 @@ export class LeadDto {
     @IsNotEmpty()
     @IsEnum(LeadStatus, { message: "status must be one of: NEW, FOLLOW_UP, UNDER_REVIEW, DEMO, NEGOTIATION, WON, LOST, UNQUALIFIED" })
     readonly status: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    readonly dealValue: number;
+
+    @IsOptional()
+    @Type(() => Date)
+    @IsDate()
+    wonDate?: Date;
 
     @IsNotEmpty()
     @IsString()

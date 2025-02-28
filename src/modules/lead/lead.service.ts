@@ -49,8 +49,15 @@ export class LeadService {
         }
     }
 
-    async update(id, data) {
+    async update(id, data: LeadDto) {
         try {
+            const lead = await this.leadRepository.findOne({
+                where: { id },
+            });
+            if(lead?.status !== data.status && data.status === "WON") {
+                data.wonDate = new Date();
+            }
+
             data.fullName = `${data.firstName} ${data.lastName}`;
             const [numberOfAffectedRows, [updatedLead]] = await this.leadRepository.update({ ...data }, { where: { id }, returning: true });
             return { numberOfAffectedRows, updatedLead };

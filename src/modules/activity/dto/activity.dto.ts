@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import { IsNotEmpty, MinLength, IsEmail, IsEnum, IsOptional, IsDate, IsMobilePhone, IsNumber, IsString, IsArray, ArrayNotEmpty, IsBoolean } from 'class-validator';
 import { ActivityStatus, ActivityType } from 'src/core/constants';
 
@@ -15,26 +16,15 @@ export class ActivityDto {
     @IsNotEmpty()
     @IsEnum(ActivityStatus, { message: "status must be one of: COMPLETED, SCHEDULED" })
     readonly status: string;
-    
-    @IsOptional()
-    @IsBoolean()
-    readonly reminder?: boolean;
 
     @IsOptional()
-    @IsEmail()
-    readonly emailAt?: string;
-
-    @IsOptional()
+    @Type(() => Date)
     @IsDate()
-    readonly fromDate?: Date;
-
-    @IsOptional()
-    @IsDate()
-    readonly toDate?: Date;
+    readonly scheduleDate?: Date;
 
     @IsNotEmpty()
     readonly leadID: number;
-    
+
     @IsNotEmpty()
     readonly userID: number;
 }

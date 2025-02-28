@@ -30,30 +30,11 @@ export class Activity extends Model<Activity> {
     })
     status: string;
 
-    @Default(false)
-    @Column({
-        type: DataType.BOOLEAN,
-        allowNull: true,
-    })
-    reminder: boolean;
-
-    @Column({
-        type: DataType.STRING,
-        allowNull: true,
-    })
-    emailAt: string;
-
     @Column({
         type: DataType.DATE,
         allowNull: true,
     })
-    fromDate: Date;
-
-    @Column({
-        type: DataType.DATE,
-        allowNull: true,
-    })
-    toDate: Date;
+    scheduleDate: Date;
 
     @ForeignKey(() => Lead)
     @Column({
