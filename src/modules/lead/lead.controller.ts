@@ -11,7 +11,7 @@ export class LeadController {
 
     @UseGuards(AuthGuard('jwt'))
     @Get()
-    async findAll( @Request() req) {
+    async findAll(@Request() req) {
         const userID = req.user.id;
         return await this.leadService.findAll(userID);
     }

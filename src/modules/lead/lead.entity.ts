@@ -1,4 +1,4 @@
-import { BeforeCreate, BeforeSave, BeforeUpdate, BelongsTo, Column, DataType, Default, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BeforeCreate, BeforeSave, BelongsTo, Column, DataType, Default, ForeignKey, Model, Table } from "sequelize-typescript";
 import { User } from "../users/user.entity";
 import { LeadStatus } from "src/core/constants";
 

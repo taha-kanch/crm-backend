@@ -7,8 +7,9 @@ import { SubscriptionTypeModule } from './modules/subscription-type/subscription
 import { SubscriptionModule } from './modules/subscription/subscription.module';
 import { StripeModule } from './modules/stripe/stripe.module';
 import { LeadModule } from './modules/lead/lead.module';
-import { ActivityService } from './modules/activity/activity.service';
 import { ActivityModule } from './modules/activity/activity.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { TargetModule } from './modules/target/target.module';
 
 @Module({
   imports: [
@@ -20,7 +21,9 @@ import { ActivityModule } from './modules/activity/activity.module';
     SubscriptionModule,
     StripeModule,
     LeadModule,
-    ActivityModule
+    ActivityModule,
+    DashboardModule,
+    TargetModule
   ],
   providers: []
 })

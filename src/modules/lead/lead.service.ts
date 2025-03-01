@@ -3,6 +3,7 @@ import { LEAD_REPOSITORY } from 'src/core/constants';
 import { Lead } from './lead.entity';
 import { LeadDto } from './dto/lead.dto';
 import { Attributes } from 'sequelize';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class LeadService {
@@ -54,7 +55,7 @@ export class LeadService {
             const lead = await this.leadRepository.findOne({
                 where: { id },
             });
-            if(lead?.status !== data.status && data.status === "WON") {
+            if (lead?.status !== data.status && data.status === "WON") {
                 data.wonDate = new Date();
             }
 
@@ -64,6 +65,53 @@ export class LeadService {
         } catch (error) {
             throw new InternalServerErrorException(error.message);
         }
+    }
+
+    async getCount(userID: number): Promise<number> {
+        try {
+            return this.leadRepository.count({
+                where: {
+                    leadOwner: userID
+                }
+            });
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    }
+
+    async getTotalWonLeadValue(userID, type: 'TODAY' | 'YESTERDAY' | 'MONTH'): Promise<number> {
+        let startDate = new Date();
+        let endDate = new Date();
+
+        switch (type) {
+            case 'TODAY':
+                startDate.setHours(0, 0, 0, 0);
+                endDate.setDate(startDate.getDate() + 1);
+                break;
+
+            case 'YESTERDAY':
+                startDate.setDate(startDate.getDate() - 1);
+                startDate.setHours(0, 0, 0, 0);
+                endDate.setDate(startDate.getDate() + 1);
+                break;
+
+            case 'MONTH':
+                startDate.setDate(1);
+                startDate.setHours(0, 0, 0, 0);
+                endDate.setMonth(endDate.getMonth() + 1, 0);
+                endDate.setHours(23, 59, 59, 999);
+                break;
+        }
+
+        const result = await this.leadRepository.sum('dealValue', {
+            where: {
+                leadOwner: userID,
+                status: 'WON',
+                wonDate: { [Op.between]: [startDate, endDate] },
+            },
+        });
+
+        return result || 0;
     }
 
 }

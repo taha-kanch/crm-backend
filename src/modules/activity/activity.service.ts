@@ -4,6 +4,7 @@ import { Activity } from './activity.entity';
 import { ActivityDto } from './dto/activity.dto';
 import { Attributes } from 'sequelize';
 import { Lead } from '../lead/lead.entity';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class ActivityService {
@@ -90,6 +91,37 @@ export class ActivityService {
         } catch (error) {
             throw new InternalServerErrorException(error.message);
         }
+    }
+
+    async getScheduledCount(userID: number):Promise<number> {
+        try {
+            return this.activityRepository.count({
+                where: {
+                    userID,
+                    status: "SCHEDULED"
+                }
+            });
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    }
+
+    async getUpcomingScheduledActivities(userID: number) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const activities = await this.activityRepository.findAll({
+            where: {
+                userID,
+                status: 'SCHEDULED',
+                scheduleDate: {
+                    [Op.gte]: today,
+                },
+            },
+            order: [['scheduleDate', 'ASC']],
+        });
+
+        return activities;
     }
 
 }

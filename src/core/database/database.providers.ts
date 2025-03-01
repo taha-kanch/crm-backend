@@ -6,6 +6,7 @@ import { SubscriptionType } from 'src/modules/subscription-type/subscription-typ
 import { Subscription } from 'src/modules/subscription/subscription.entity';
 import { Lead } from 'src/modules/lead/lead.entity';
 import { Activity } from 'src/modules/activity/activity.entity';
+import { Target } from 'src/modules/target/target.entity';
 
 export const databaseProviders = [{
     provide: SEQUELIZE,
@@ -25,7 +26,7 @@ export const databaseProviders = [{
            config = databaseConfig.development;
         }
         const sequelize = new Sequelize(config);
-        sequelize.addModels([User, SubscriptionType, Subscription, Lead, Activity]);
+        sequelize.addModels([User, SubscriptionType, Subscription, Lead, Activity, Target]);
         await sequelize.sync();
         return sequelize;
     },

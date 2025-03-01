@@ -5,6 +5,7 @@ import { LeadProviders } from './lead.providers';
 
 @Module({
   providers: [LeadService, ...LeadProviders],
-  controllers: [LeadController]
+  controllers: [LeadController],
+  exports: [LeadService],
 })
 export class LeadModule {}
