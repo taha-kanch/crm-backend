@@ -9,7 +9,7 @@ import { LeadProviders } from '../lead/lead.providers';
 import { ActivityProviders } from '../activity/activity.providers';
 
 @Module({
-  providers: [DashboardService, ...TargetProviders, ...LeadProviders, ...ActivityProviders],
+  providers: [DashboardService, ...TargetProviders, ...LeadProviders, ...ActivityProviders, ...TargetProviders],
   controllers: [DashboardController],
   imports: [LeadModule, ActivityModule, TargetModule]
 })

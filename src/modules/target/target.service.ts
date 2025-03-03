@@ -12,7 +12,7 @@ export class TargetService {
 
     async upsertTarget(userID: number, target: TargetDto): Promise<Target> {
         const [targetData, created] = await this.targetRepository.findOrCreate({
-            where: { year: target.year, month: target.month },
+            where: { year: target.year, month: target.month, userID },
             defaults: { targetValue: target.targetValue } as Attributes<Target>,
         });
 

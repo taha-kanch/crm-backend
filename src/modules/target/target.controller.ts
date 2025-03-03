@@ -19,7 +19,11 @@ export class TargetController {
     @Get()
     async getByYearAndMonth(@Query('year') year: number, @Query('month') month: number, @Request() req) {
         const userID = req.user.id;
-        return this.targetService.getByYearAndMonth(userID, year, month);
+        const target = await this.targetService.getByYearAndMonth(userID, year, month);
+        if(!target) {
+            return {};
+        }
+        return target;
     }
 
     @UseGuards(AuthGuard('jwt'))

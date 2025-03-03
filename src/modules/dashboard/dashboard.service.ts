@@ -3,9 +3,10 @@ import { LeadService } from '../lead/lead.service';
 import { ActivityService } from '../activity/activity.service';
 import { TargetService } from '../target/target.service';
 import { Lead } from '../lead/lead.entity';
-import { LEAD_REPOSITORY } from 'src/core/constants';
+import { LEAD_REPOSITORY, TARGET_REPOSITORY } from 'src/core/constants';
 import { Sequelize } from 'sequelize';
 import { Op } from 'sequelize';
+import { Target } from '../target/target.entity';
 
 @Injectable()
 export class DashboardService {
@@ -15,6 +16,7 @@ export class DashboardService {
         private readonly activityService: ActivityService,
         private readonly targetService: TargetService,
         @Inject(LEAD_REPOSITORY) private readonly leadRepository: typeof Lead,
+        @Inject(TARGET_REPOSITORY) private readonly targetRepository: typeof Target,
     ) { }
 
     async getSummary(userID: number) {
@@ -69,10 +71,11 @@ export class DashboardService {
     }
 
     async getLeadValueSummary(userID: number, type: 'MONTHLY' | 'YEARLY', year?: number) {
-        let results;
+        let leadResults;
+        let targetResults;
 
         if (type === 'MONTHLY') {
-            results = await this.leadRepository.findAll({
+            leadResults = await this.leadRepository.findAll({
                 attributes: [
                     [Sequelize.literal(`EXTRACT(MONTH FROM "wonDate")`), 'month'],
                     [Sequelize.fn('SUM', Sequelize.col('dealValue')), 'leadValueSum'],
@@ -89,14 +92,27 @@ export class DashboardService {
                 },
                 group: [Sequelize.col('month')],
                 order: [Sequelize.col('month')],
+                raw: true,
             });
 
-            return results.map((item: any) => ({
-                month: item.getDataValue('month'),
-                leadValueSum: item.getDataValue('leadValueSum'),
-            }));
+            targetResults = await this.targetRepository.findAll({
+                attributes: ['month', 'targetValue'],
+                where: {
+                    year: year,
+                    userID,
+                },
+                raw: true,
+            });
+            return leadResults.map((lead) => {
+                const target = targetResults.find((t) => t.month == lead.month);
+                return {
+                    month: lead.month,
+                    leadValueSum: lead.leadValueSum,
+                    targetValue: target?.targetValue,
+                };
+            });
         } else {
-            results = await this.leadRepository.findAll({
+            leadResults = await this.leadRepository.findAll({
                 attributes: [
                     [Sequelize.literal(`EXTRACT(YEAR FROM "wonDate")`), 'year'],
                     [Sequelize.fn('SUM', Sequelize.col('dealValue')), 'leadValueSum'],
@@ -110,11 +126,22 @@ export class DashboardService {
                 },
                 group: [Sequelize.col('year')],
                 order: [Sequelize.col('year')],
+                raw: true,
             });
 
-            return results.map((item: any) => ({
-                year: item.getDataValue('year'),
-                leadValueSum: item.getDataValue('leadValueSum'),
+            targetResults = await this.targetRepository.findAll({
+                attributes: [[Sequelize.fn('SUM', Sequelize.col('targetValue')), 'targetValue']],
+                where: {
+                    year: { [Op.gte]: 2025 },
+                    userID
+                },
+                raw: true,
+            });
+
+            return leadResults.map((lead) => ({
+                year: lead.year,
+                leadValueSum: lead.leadValueSum,
+                targetValue: targetResults[0]?.targetValue,
             }));
         }
     }

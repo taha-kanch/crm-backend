@@ -32,4 +32,11 @@ export class Target extends Model<Target> {
     @BelongsTo(() => User)
     user: User;
 
+    toJSON() {
+        return {
+            ...this.get(),
+            targetValue: parseFloat(this.getDataValue('targetValue') as unknown as string),
+        }
+    }
+
 }
